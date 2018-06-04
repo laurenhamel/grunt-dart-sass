@@ -1,0 +1,30 @@
+{
+  "name": "grunt-dart-sass",
+  "version": "1.0.0",
+  "description": "Compile Sass to CSS via Dart Sass CLI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurenhamel/grunt-dart-sass.git"
+  },
+  "keywords": [
+    "npm",
+    "grunt",
+    "dart-sass",
+    "sass"
+  ],
+  "author": "Lauren Hamel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/laurenhamel/grunt-dart-sass/issues"
+  },
+  "homepage": "https://github.com/laurenhamel/grunt-dart-sass#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "extend": "^3.0.1",
+    "fs": "0.0.1-security",
+    "intercept-stdout": "^0.1.2",
+    "path": "^0.12.7",
+    "sass": "^1.5.1"
+  },
+  "devDependencies": {}
+}
