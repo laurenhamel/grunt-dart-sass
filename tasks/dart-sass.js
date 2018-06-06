@@ -11,7 +11,7 @@
 module.exports = function (grunt) {
   
   // Register Grunt multi-task.
-  grunt.registerMultiTask('dart-sass', 'Compile Sass to CSS via Dart Sass CLI', function () { 
+  grunt.registerMultiTask('dart-sass', 'Compile Sass to CSS via Dart Sass', function () { 
     
     // Load dependencies.
     const sass = require('sass');
@@ -19,14 +19,13 @@ module.exports = function (grunt) {
     const path = require('path');
     const chalk = require('chalk');
     const intercept = require('intercept-stdout');
-    const fs = require('fs');
     
     // Make asynchronous.
     const done = this.async();
     
     // Set options.
     const options = this.options({
-      sourceMap: true,
+      sourceMap: undefined,
       sourceMapContents: false,
       sourceMapEmbed: false,
       sourceMapRoot: undefined,
@@ -98,7 +97,7 @@ module.exports = function (grunt) {
         const result = sass.renderSync(data);
         
         // Save the CSS file to its target destination
-        fs.writeFileSync(file.dest, results.css);
+        grunt.file.write(file.dest, results.css);
         
       }
       

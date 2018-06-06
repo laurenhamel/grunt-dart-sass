@@ -1,7 +1,7 @@
 {
   "name": "grunt-dart-sass",
   "version": "1.0.0",
-  "description": "Compile Sass to CSS via Dart Sass CLI",
+  "description": "Compile Sass to CSS via Dart Sass",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/laurenhamel/grunt-dart-sass.git"
@@ -21,7 +21,6 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "extend": "^3.0.1",
-    "fs": "0.0.1-security",
     "intercept-stdout": "^0.1.2",
     "path": "^0.12.7",
     "sass": "^1.5.1"
