@@ -22,7 +22,7 @@ Run this task with the `grunt dart-sass` command.
 
 ## Options
 
-Refer to the [Dart Sass JavaScript API](https://github.com/sass/dart-sass#javascript-api) for more information about these options and guidelines for proper usage. These options are similar to the those of [Node-sass](https://github.com/sass/node-sass), excluding `precision` and `sourceComments` options and sans the `nested` and `compact` values for the `outputStyle` option.
+Refer to the [Dart Sass JavaScript API](https://github.com/sass/dart-sass#javascript-api) for more information about options and guidelines for proper usage. [Dart Sass](https://github.com/sass/dart-sass) options are similar to the those of [Node-sass](https://github.com/sass/node-sass), excluding `precision` and `sourceComments` options and sans the `nested` and `compact` values for the `outputStyle` option.
 
 ## Examples
 
