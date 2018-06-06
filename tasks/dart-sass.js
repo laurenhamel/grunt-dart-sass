@@ -11,7 +11,7 @@
 module.exports = function (grunt) {
   
   // Register Grunt multi-task.
-  grunt.registerMultiTask('dart-sass', 'Compile Sass to CSS via Dart Sass', function () { 
+  grunt.registerMultiTask('dart-sass', 'Compile Sass to CSS via Dart Sass', async function () { 
     
     // Load dependencies.
     const sass = require('sass');
@@ -24,32 +24,23 @@ module.exports = function (grunt) {
     const done = this.async();
     
     // Set options.
-    const options = this.options({
-      sourceMap: undefined,
-      sourceMapContents: false,
-      sourceMapEmbed: false,
-      sourceMapRoot: undefined,
-      outputStyle: 'expanded',
-      omitSourceMapUrl: false,
-      indentedSyntax: false,
-      indentType: 'space',
-      indentWidth: 2,
-      lineFeed: 'lf',
-      includePaths: [],
-      /*file*/
-      /*outFile*/
-    }); 
+    const options = this.options(); 
+    
+    // Initialize default logger type.
+    let type = 'log';
+    
+    // Define logger styles.
+    const styles = {
+      log: [],
+      error: ['red'],
+      warn: ['yellow'],
+      debug: ['blue'],
+    };
     
     // Initialize results.
     let results = [];
     
-    // Initialize error handler.
-    let error = undefined; 
-    
-    // Initialize output type.
-    let type = 'log';
-    
-    // Initialize interceptor.
+    // Initialize console interceptor.
     const unhook = intercept(function(text) {
       
       // Make sure some text has been captures.
@@ -81,97 +72,87 @@ module.exports = function (grunt) {
       return '';
       
     });
-    
-    for( let file of this.files ) { 
+   
+    // Wait for the Sass files to compile.
+    await Promise.all(this.files.map(async (file) => {
+      
+      // Attempt to compile the Sass file.
+      try {
+      
+        // Capture the source.
+        const [src] = file.src;
 
-      // Try to compile Sass.
-      try { 
-        
-        // Initialize render data.
-        const data = extend({}, options, {
-          file: Array.isArray(file.src) ? file.src[0] : file.src,
+        // Validate the source.
+        if( !src || path.basename(src)[0] === '_' ) return;
+
+        // Render the Sass file.
+        const result = sass.renderSync(extend({}, options, {
+          file: src,
           outFile: file.dest
-        }); 
+        })); 
+        
+        // Save the CSS file.
+        grunt.file.write(file.dest, result.css);
+        
+        // Save the source map.
+        if( options.sourceMap ) grunt.file.write((options.sourceMap === true ? `${file.dest}.map` : options.sourceMap), result.map);
+  
+      } 
       
-        // Render Sass file.
-        const result = sass.renderSync(data);
-        
-        // Save the CSS file to its target destination
-        grunt.file.write(file.dest, results.css);
-        
-      }
+      // Catch any errors.
+      catch(error) { throw error; }
       
-      // Otherwise, catch any errors.
-      catch(e) {
-        
-        error = e;
-        
-        break;
-      
-      }
+    }))
+      .then(() => {
+    
+        // Unhook the interceptor.
+        unhook();
 
-    }
-    
-    // Unhook the interceptor.
-    unhook();
-    
-    // Standardize the console logger.
-    console.log = console.debug = console.error = console.warn = function(text) {
-      
-      process.stdout.write(text);
-      
-    };
-    
-    // Handle errors.
-    if( error ) done(error);
-    
-    // Otherwise, log results.
-    else {
-      
-      // Flatten the result set.
-      results = results.reduce((array, result) => {
-        
-        if( Array.isArray(result) ) array = array.concat(result);
-        
-        else array.push(result);
-        
-        return array;
-        
-      }, []);
-    
-      // Set output styles.
-      const styles = {
-        log: [],
-        error: ['red'],
-        warn: ['yellow'],
-        debug: ['blue'],
-      };
+        // Standardize the console logger.
+        console.log = console.debug = console.error = console.warn = function(text) { process.stdout.write(text); };
 
-      // Stylize results.
-      results.forEach((result) => {
-        
-        // Get the style.
-        const style = styles[result.type].length > 0 ? styles[result.type].slice() : false;
+        // Flatten the result set.
+        results = results.reduce((array, result) => {
 
-        // Handle styles.
-        if( style ) {
-          
-          // Bold important words.
-          if( ['WARNING', 'ERROR', 'DEBUG'].includes(result.text) ) style.push('bold');
-          
-          // Output the result.
-          console[result.type](chalk`{${style.join('.')} ${result.text}}`);
-          
-        }
+          if( Array.isArray(result) ) array = array.concat(result);
 
-        else console[result.type](result.text);
+          else array.push(result);
+
+          return array;
+
+        }, []);
+
+        // Stylize results.
+        results.forEach((result) => {
+
+          // Get the style.
+          const style = styles[result.type].length > 0 ? styles[result.type].slice() : false;
+
+          // Handle styles.
+          if( style ) {
+
+            // Bold important words.
+            if( ['WARNING', 'ERROR', 'DEBUG'].includes(result.text) ) style.push('bold');
+
+            // Output the result.
+            console[result.type](chalk`{${style.join('.')} ${result.text}}`);
+
+          }
+
+          else console[result.type](result.text);
+
+        });
+
+        // Done.
+        done();
+
+      })
+      .catch((error) => {
+      
+        // Done, but errors occurred.
+        done(error);
 
       });
-
-      // Done.
-      done();
-      
-    }
     
   });
   
