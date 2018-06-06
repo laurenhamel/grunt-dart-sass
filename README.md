@@ -26,7 +26,7 @@ Refer to the [Dart Sass JavaScript API](https://github.com/sass/dart-sass#javasc
 
 ## Examples
 
-Add a section named `dart-sass` to the data object passed into `grunt.initConfig()`, the pass in some files.
+Add a section named `dart-sass` to the data object passed into `grunt.initConfig()`, then pass in your files object or array.
 
 ```js
 grunt.initConfig({
