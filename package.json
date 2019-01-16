@@ -22,12 +22,12 @@
     "chalk": "^2.4.1",
     "extend": "^3.0.1",
     "intercept-stdout": "^0.1.2",
-    "path": "^0.12.7",
-    "sass": "^1.5.1"
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "grunt": "^1.0.3",
     "grunt-contrib-clean": "^2.0.0",
-    "grunt-contrib-nodeunit": "^2.0.0"
+    "grunt-contrib-nodeunit": "^2.0.0",
+    "sass": "^1.16.0"
   }
 }
