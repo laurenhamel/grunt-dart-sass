@@ -1,0 +1,11 @@
+@import 'functions';
+@import 'mixins';
+
+$color: blue;
+$size: 25px;
+
+.box {
+  color: $color;
+  @include size($size);
+  border: ($size / 5) solid darken($color, 25%);
+}

@@ -1,0 +1,5 @@
+@function scale( $number, $scale: 1 ) {
+  
+  @return $number * $scale;
+  
+}

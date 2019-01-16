@@ -25,5 +25,9 @@
     "path": "^0.12.7",
     "sass": "^1.5.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "grunt": "^1.0.3",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-nodeunit": "^2.0.0"
+  }
 }

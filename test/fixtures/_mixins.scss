@@ -1,0 +1,6 @@
+@mixin size( $size ) {
+  
+  width: scale($size, 2);
+  height: scale($size, 2);
+  
+}
