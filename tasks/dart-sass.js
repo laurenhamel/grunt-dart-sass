@@ -32,16 +32,20 @@ module.exports = function (grunt) {
     // Define logger styles.
     const styles = {
       log: [],
+      success: ['green'],
       error: ['red'],
       warn: ['yellow'],
       debug: ['blue'],
     };
-    
+
     // Initialize results.
     let results = [];
     
+    // Initialize counter.
+    let compiled = 0;
+    
     // Initialize console interceptor.
-    const unhook = intercept(function(text) {
+    const unhook = intercept((text) => {  console.log('HUH?');
       
       // Make sure some text has been captures.
       if( text ) {
@@ -56,6 +60,7 @@ module.exports = function (grunt) {
         if( !Array.isArray(results[next]) ) results[next] = [];
         
         // Check for types.
+        if( text.indexOf('SUCCESS') === 0 ) type = 'success';
         if( text.indexOf('ERROR') === 0 ) type = 'error';
         if( text.indexOf('WARN') === 0 ) type = 'warn';
         if( text.indexOf('DEBUG') === 0 ) type = 'debug';
@@ -72,7 +77,7 @@ module.exports = function (grunt) {
       return '';
       
     });
-   
+  
     // Wait for the Sass files to compile.
     await Promise.all(this.files.map(async (file) => {
       
@@ -96,63 +101,70 @@ module.exports = function (grunt) {
         
         // Save the source map.
         if( options.sourceMap ) grunt.file.write((options.sourceMap === true ? `${file.dest}.map` : options.sourceMap), result.map);
+        
+        // Tally success.
+        ++compiled;
   
       } 
       
       // Catch any errors.
       catch(error) { throw error; }
       
-    }))
-      .then(() => {
+    })).then(() => {
     
-        // Unhook the interceptor.
-        unhook();
+      // Unhook the interceptor.
+      unhook();
 
-        // Standardize the console logger.
-        console.log = console.debug = console.error = console.warn = function(text) { process.stdout.write(text); };
+      // Standardize the console logger.
+      console.log = console.debug = console.error = console.warn = function(text) { process.stdout.write(text); };
 
-        // Flatten the result set.
-        results = results.reduce((array, result) => {
+      // Flatten the result set.
+      results = results.reduce((array, result) => {
 
-          if( Array.isArray(result) ) array = array.concat(result);
+        if( Array.isArray(result) ) array = array.concat(result);
 
-          else array.push(result);
+        else array.push(result);
 
-          return array;
+        return array;
 
-        }, []);
+      }, []);
 
-        // Stylize results.
-        results.forEach((result) => {
+      // Stylize results.
+      results.forEach((result) => {
 
-          // Get the style.
-          const style = styles[result.type].length > 0 ? styles[result.type].slice() : false;
+        // Get the style.
+        const style = styles[result.type].length > 0 ? styles[result.type].slice() : false;
 
-          // Handle styles.
-          if( style ) {
+        // Handle styles.
+        if( style ) {
 
-            // Bold important words.
-            if( ['WARNING', 'ERROR', 'DEBUG'].includes(result.text) ) style.push('bold');
+          // Bold important words.
+          if( ['WARNING', 'ERROR', 'DEBUG'].includes(result.text) ) style.push('bold');
 
-            // Output the result.
-            console[result.type](chalk`{${style.join('.')} ${result.text}}`);
+          // Output the result.
+          console[result.type](chalk`{${style.join('.')} ${result.text}}`);
 
-          }
+        }
 
-          else console[result.type](result.text);
-
-        });
-
-        // Done.
-        done();
-
-      })
-      .catch((error) => {
-      
-        // Done, but errors occurred.
-        done(error);
+        else console[result.type](result.text);
 
       });
+      
+      // Report done.
+      console.log(chalk`{${styles.success.join('.')} Successfully compiled ${compiled} Sass file(s).\n}`);
+
+      // Done.
+      done();
+
+    }).catch((error) => { 
+      
+      // Unhook the interceptor.
+      unhook();
+      
+      // Done, but errors occurred.
+      done(error);
+
+    });
     
   });
   
