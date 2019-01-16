@@ -28,6 +28,22 @@ Refer to the [Dart Sass JavaScript API](https://github.com/sass/dart-sass#javasc
 
 Add a section named `dart-sass` to the data object passed into `grunt.initConfig()`, then pass in your files object or array.
 
+**Compile a file**
+
+```js
+grunt.initConfig({
+  'dart-sass': {
+    target: {
+      files: {
+        'dest/css/style.css': 'src/scss/style.scss'
+      }
+    }
+  }
+});
+```
+
+**Compile all files within a folder**
+
 ```js
 grunt.initConfig({
   'dart-sass': {
@@ -36,9 +52,43 @@ grunt.initConfig({
         expand: true,
         cwd: 'src/scss/',
         src: ['*.scss'],
-        dest: ['dest/css'],
+        dest: 'dest/css',
         ext: '.css'
       }]
+    }
+  }
+});
+```
+
+**Compress the CSS output**
+
+```js
+grunt.initConfig({
+  'dart-sass': {
+    target: {
+      options: {
+        outputStyle: 'compressed'
+      },
+      files: {
+        'dest/css/style.css': 'src/scss/style.scss'
+      }
+    }
+  }
+});
+```
+
+**Prevent the creation of source maps**
+
+```js
+grunt.initConfig({
+  'dart-sass': {
+    target: {
+      options: {
+        sourceMap: false
+      },
+      files: {
+        'dest/css/style.css': 'src/scss/style.scss'
+      }
     }
   }
 });
