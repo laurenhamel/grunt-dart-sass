@@ -45,7 +45,7 @@ module.exports = function (grunt) {
     let compiled = 0;
     
     // Initialize console interceptor.
-    const unhook = intercept((text) => {  console.log('HUH?');
+    const unhook = intercept((text) => {
       
       // Make sure some text has been captures.
       if( text ) {
