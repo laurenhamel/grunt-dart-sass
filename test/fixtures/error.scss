@@ -6,6 +6,6 @@ $size: 25px;
 
 .box {
   color: $color;
-  @include size($sizze);
+  @include size($size);
   border: ($size / 5) solid darken($color, 25%);
 }
