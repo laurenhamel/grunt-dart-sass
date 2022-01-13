@@ -20,7 +20,16 @@ module.exports = (grunt) => {
         files: {
           'test/tmp/error.css': 'test/fixtures/error.scss'
         }
-      }
+      },
+      whole_dir: {
+        files: [{
+          expand: true,
+          cwd: 'test/fixtures',
+          src: ['*.scss'],
+          dest: 'test/tmp/whole_dir',
+          ext: '.css'
+        }]
+      },
     },
     clean: {
       test: ['test/tmp']
@@ -40,6 +49,7 @@ module.exports = (grunt) => {
     'clean',
     'dart-sass:expanded',
     'dart-sass:compressed',
+    'dart-sass:whole_dir',
     'nodeunit',
     'clean'
   ]);

@@ -19,6 +19,17 @@ exports['dart-sass'] = {
 
     test.done();
   
+  },
+  whole_dir_test(test) {
+    const expected_output = grunt.file.read('test/expected/test.css')
+    const outputs = [
+      grunt.file.read('test/tmp/whole_dir/test.css'),
+      grunt.file.read('test/tmp/whole_dir/error.css'),
+    ];
+
+    outputs.forEach((output) => test.equal(output, expected_output, 'should compile SCSS to CSS'));
+
+    test.done();
   }
   
 };
