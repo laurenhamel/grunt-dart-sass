@@ -20,8 +20,8 @@
   "homepage": "https://github.com/laurenhamel/grunt-dart-sass#readme",
   "dependencies": {
     "chalk": "^2.4.1",
-    "intercept-stdout": "^0.1.2",,
-    "lodash": "^4.17.21"
+    "intercept-stdout": "^0.1.2",
+    "lodash": "^4.17.21",
     "path": "^0.12.7"
   },
   "devDependencies": {
