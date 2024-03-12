@@ -38,7 +38,7 @@ module.exports = async function (grunt) {
         const { src: [src], dest } = file;
 
         // Validate the source.
-        if( !src || _.startsWith(path.basename(src), '_') ) return;
+        if( !src || _.startsWith(path.basename(src), '_') ) continue; // this was returning upon the first instance of an invalid source file, therefore stopping processing
 
         // Render the Sass file.
         const result = sass.renderSync(_.merge({}, options, {
